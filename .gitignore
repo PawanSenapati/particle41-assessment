@@ -1,0 +1,5 @@
+/gittoken.txt
+*.tfstate
+*.tfstate.*
+
+**/.terraform/*

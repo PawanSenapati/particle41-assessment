@@ -1,0 +1,58 @@
+name: Deploy Infrastructure
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'app/**'        # Triggers Docker build only if app/ is changed
+      - 'terraform/**'   # Triggers Terraform for changes in terraform/
+      - '.github/workflows/deploy.yml'  # Run if workflow file itself is changed
+
+env:
+  PROJECT_ID: vertical-jigsaw-449420-a9
+  SERVICE_ACCOUNT_KEY: ${{ secrets.GCP_SA_KEY }}
+
+jobs:
+  docker:
+    if: contains(github.event.head_commit.modified, 'app/')
+    runs-on: ubuntu-latest
+    
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+          
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: ${{ secrets.DOCKER_HUB_USERNAME }}
+          password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
+          
+      - name: Build and Push Docker image to Docker Hub
+        run: |
+          docker build -t pawansenapati/p41-assessment:${{ github.sha }} ./app
+          docker build -t pawansenapati/p41-assessment:latest ./app
+          docker push pawansenapati/p41-assessment:${{ github.sha }}
+          docker push pawansenapati/p41-assessment:latest
+  
+  terraform:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: terraform
+
+    steps:
+      - id: 'auth'
+        name: Configure GCP credentials
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: '${{ secrets.GCP_SA_KEY }}'
+          token_format: 'access_token'
+
+      - name: Deploy Infrastructure using Terraform
+        run: |
+          cd terraform
+          terraform init -input=true
+          terraform plan -var="cr_image=pawansenapati/p41-assessment:latest"
+          terraform apply -var="cr_image=pawansenapati/p41-assessment:latest" -auto-approve
