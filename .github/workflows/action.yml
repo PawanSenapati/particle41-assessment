@@ -46,6 +46,7 @@ jobs:
           docker push pawansenapati/p41-assessment:latest
   
   terraform:
+    needs: docker
     runs-on: ubuntu-latest
     defaults:
       run:
