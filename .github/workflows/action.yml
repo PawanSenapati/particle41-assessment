@@ -15,21 +15,30 @@ env:
 
 jobs:
   docker:
-    if: contains(github.event.head_commit.modified, 'app/**')
+    # if: contains(github.event.head_commit.modified, 'app/**')
     runs-on: ubuntu-latest
     
     steps:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
+      - uses: dorny/paths-filter@v3
+      - id: changes
+        with:
+          filters: |
+            app:
+              - 'app/**'
           
       - name: Log in to Docker Hub
+        if: steps.changes.outputs.app == 'true'
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKER_HUB_USERNAME }}
           password: ${{ secrets.DOCKER_HUB_ACCESS_TOKEN }}
           
       - name: Build and Push Docker image to Docker Hub
+        # run only if some file in 'app' folder was changed
+        if: steps.changes.outputs.app == 'true'
         run: |
           docker build -t pawansenapati/p41-assessment:${{ github.sha }} ./app
           docker build -t pawansenapati/p41-assessment:latest ./app
