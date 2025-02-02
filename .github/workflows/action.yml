@@ -15,7 +15,7 @@ env:
 
 jobs:
   docker:
-    if: contains(github.event.head_commit.modified, 'app/')
+    if: contains(github.event.head_commit.modified, 'app/**')
     runs-on: ubuntu-latest
     
     steps:
@@ -56,7 +56,7 @@ jobs:
         uses: hashicorp/setup-terraform@v2
         with:
           terraform_version: latest
-          
+
       - name: Deploy Infrastructure using Terraform
         run: |
           terraform init -input=true
