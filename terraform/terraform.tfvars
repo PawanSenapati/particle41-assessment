@@ -1,5 +1,5 @@
 # Project APIs
-apis = ["serviceusage.googleapis.com", "run.googleapis.com", "compute.googleapis.com", "cloudbuild.googleapis.com"]
+apis = ["serviceusage.googleapis.com", "run.googleapis.com", "compute.googleapis.com", "cloudbuild.googleapis.com", "cloudresourcemanager.googleapis.com"]
 
 # Cloud Run Variable Values
 cr_service_name = "simple-time-service"
