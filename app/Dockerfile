@@ -17,8 +17,8 @@ RUN pip install --no-cache-dir -r requirements.txt
 RUN chown -R appuser:appgroup /app
 USER appuser
 
-# Expose port 8080 and start the application
-EXPOSE 8080
+# Expose port 5000 and start the application
+EXPOSE 5000
 ENV FLASK_APP=app.py
 
 # Run the server in Cloud Run
