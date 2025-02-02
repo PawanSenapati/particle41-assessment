@@ -15,7 +15,7 @@ env:
 
 jobs:
   docker:
-    # if: contains(github.event.head_commit.modified, 'app/')
+    if: contains(github.event.head_commit.modified, 'app/')
     runs-on: ubuntu-latest
     
     steps:
@@ -54,7 +54,6 @@ jobs:
 
       - name: Deploy Infrastructure using Terraform
         run: |
-          cd terraform
           terraform init -input=true
           terraform plan -var="cr_image=pawansenapati/p41-assessment:latest"
           terraform apply -var="cr_image=pawansenapati/p41-assessment:latest" -auto-approve
