@@ -47,9 +47,7 @@ jobs:
         with:
           fetch-depth: 0
 
-    steps:
-      - id: 'auth'
-        name: Configure GCP credentials
+      - name: Configure GCP credentials
         uses: google-github-actions/auth@v2
         with:
           credentials_json: '${{ secrets.GCP_SA_KEY }}'
