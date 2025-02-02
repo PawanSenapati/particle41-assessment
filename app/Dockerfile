@@ -19,4 +19,6 @@ USER appuser
 
 # Expose port 5000 and start the application
 EXPOSE 8080
+
+# Run the server in serverless Cloud Run
 CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:8080", "app:app"]
