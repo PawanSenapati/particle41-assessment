@@ -52,6 +52,11 @@ jobs:
         with:
           credentials_json: '${{ secrets.GCP_SA_KEY }}'
 
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: latest
+          
       - name: Deploy Infrastructure using Terraform
         run: |
           terraform init -input=true
