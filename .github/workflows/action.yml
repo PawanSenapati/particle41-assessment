@@ -15,7 +15,7 @@ env:
 
 jobs:
   docker:
-    if: contains(github.event.head_commit.modified, 'app/')
+    # if: contains(github.event.head_commit.modified, 'app/')
     runs-on: ubuntu-latest
     
     steps:
@@ -41,6 +41,11 @@ jobs:
     defaults:
       run:
         working-directory: terraform
+    
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
     steps:
       - id: 'auth'
