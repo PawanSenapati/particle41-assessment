@@ -23,7 +23,7 @@ jobs:
         with:
           fetch-depth: 0
       - uses: dorny/paths-filter@v3
-      - id: changes
+        id: changes
         with:
           filters: |
             app:
