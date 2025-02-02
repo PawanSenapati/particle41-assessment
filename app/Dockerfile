@@ -18,5 +18,5 @@ RUN chown -R appuser:appgroup /app
 USER appuser
 
 # Expose port 5000 and start the application
-EXPOSE 5000
-CMD ["python", "app.py"]
+EXPOSE 8080
+CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:8080", "app:app"]
