@@ -17,8 +17,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 RUN chown -R appuser:appgroup /app
 USER appuser
 
-# Expose port 5000 and start the application
+# Expose port 8080 and start the application
 EXPOSE 8080
+ENV FLASK_APP=app.py
 
 # Run the server in Cloud Run
-CMD ["gunicorn", "-w", "4", "-b", "0.0.0.0:8080", "app:app"]
+CMD ["flask", "run", "--host=0.0.0.0"]
