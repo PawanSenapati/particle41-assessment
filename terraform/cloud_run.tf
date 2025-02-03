@@ -20,3 +20,20 @@ module "cloud_run" {
   }
   container_concurrency = var.cr_concurrency
 }
+
+data "google_iam_policy" "noauth" {
+  binding {
+    role = "roles/run.invoker"
+    members = [
+      "allUsers",
+    ]
+  }
+}
+
+resource "google_cloud_run_service_iam_policy" "noauth" {
+  location = module.cloud_run.location
+  project  = module.cloud_run.project_id
+  service  = module.cloud_run.service_name
+
+  policy_data = data.google_iam_policy.noauth.policy_data
+}
