@@ -19,6 +19,7 @@ module "cloud_run" {
     "run.googleapis.com/ingress" : var.cr_ingress_setting
   }
   container_concurrency = var.cr_concurrency
+  depends_on            = [module.project-factory_project_services]
 }
 
 data "google_iam_policy" "noauth" {
@@ -28,6 +29,7 @@ data "google_iam_policy" "noauth" {
       "allUsers",
     ]
   }
+  depends_on = [module.project-factory_project_services]
 }
 
 resource "google_cloud_run_service_iam_policy" "noauth" {
@@ -36,4 +38,5 @@ resource "google_cloud_run_service_iam_policy" "noauth" {
   service  = module.cloud_run.service_name
 
   policy_data = data.google_iam_policy.noauth.policy_data
+  depends_on  = [module.project-factory_project_services]
 }
