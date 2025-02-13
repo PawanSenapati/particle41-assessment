@@ -5,3 +5,7 @@ module "project-factory_project_services" {
   project_id    = local.project_id
   activate_apis = var.apis
 }
+
+module "load-balancer" {
+  source = "./modules/api_gateway"
+}
