@@ -1,4 +1,9 @@
-variable "cloud_run_url" {
+variable "cloud_run_name" {
   type        = string
-  description = "URL of the Cloud Run service"
+  description = "Name of the Cloud Run service"
+}
+
+variable "region" {
+  type        = string
+  description = "Region of NEG"
 }

@@ -7,7 +7,8 @@ module "project-factory_project_services" {
 }
 
 module "load-balancer" {
-  source        = "./modules/api_gateway"
-  cloud_run_url = module.cloud_run.service_url
-  depends_on    = [module.project-factory_project_services]
+  source         = "./modules/api_gateway"
+  cloud_run_name = module.cloud_run.service_name
+  region         = local.region
+  depends_on     = [module.project-factory_project_services]
 }

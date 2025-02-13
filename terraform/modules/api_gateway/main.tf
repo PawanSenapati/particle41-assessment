@@ -3,6 +3,16 @@ resource "google_api_gateway_api" "api" {
   api_id   = "simple-time-api"
 }
 
+resource "google_compute_region_network_endpoint_group" "cloud_run_neg" {
+  name                  = "cloud-run-neg"
+  network_endpoint_type = "SERVERLESS"
+  region                = var.region
+
+  cloud_run {
+    service = var.cloud_run_name
+  }
+}
+
 resource "google_compute_backend_service" "default" {
   name                  = "cloud-run-backend"
   enable_cdn            = true
@@ -11,7 +21,7 @@ resource "google_compute_backend_service" "default" {
   load_balancing_scheme = "EXTERNAL"
 
   backend {
-    group = var.cloud_run_url
+    group = google_compute_region_network_endpoint_group.cloud_run_neg.id
   }
 }
 
@@ -32,7 +42,7 @@ resource "google_compute_global_forwarding_rule" "default" {
 }
 
 resource "google_storage_bucket" "image_bucket" {
-  name     = "image-store-bucket"
+  name     = "cdn-bucket"
   location = "US"
 }
 
