@@ -42,7 +42,7 @@ resource "google_compute_global_forwarding_rule" "default" {
 }
 
 resource "google_storage_bucket" "image_bucket" {
-  name     = "cdn-bucket"
+  name     = "cdn-bucket-p41"
   location = "US"
 }
 
