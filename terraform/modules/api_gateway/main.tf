@@ -11,7 +11,7 @@ resource "google_compute_backend_service" "default" {
   load_balancing_scheme = "EXTERNAL"
 
   backend {
-    group = module.cloud_run.service_url
+    group = var.cloud_run_url
   }
 }
 
