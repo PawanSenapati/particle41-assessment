@@ -3,22 +3,42 @@ resource "google_api_gateway_api" "api" {
   api_id   = "simple-time-api"
 }
 
-resource "google_api_gateway_api_config" "config" {
-  provider      = google-beta
-  api           = google_api_gateway_api.api.api_id
-  api_config_id = "simple-time-config"
+resource "google_compute_backend_service" "default" {
+  name                  = "cloud-run-backend"
+  enable_cdn            = true
+  protocol              = "HTTP"
+  port_name             = "http"
+  load_balancing_scheme = "EXTERNAL"
 
-  openapi_documents {
-    document {
-      path     = "openapi.yaml"
-      contents = filebase64("${path.module}/openapi.yaml")
-    }
+  backend {
+    group = module.cloud_run.service_url
   }
 }
 
-resource "google_api_gateway_gateway" "gateway" {
-  provider   = google-beta
-  api_config = google_api_gateway_api_config.config.id
-  gateway_id = "simple-time-gateway"
-  region     = var.region
+resource "google_compute_url_map" "default" {
+  name            = "cloud-run-url-map"
+  default_service = google_compute_backend_service.default.id
 }
+
+resource "google_compute_target_http_proxy" "default" {
+  name    = "http-proxy"
+  url_map = google_compute_url_map.default.id
+}
+
+resource "google_compute_global_forwarding_rule" "default" {
+  name       = "http-forwarding-rule"
+  target     = google_compute_target_http_proxy.default.id
+  port_range = "80"
+}
+
+resource "google_storage_bucket" "image_bucket" {
+  name     = "image-store-bucket"
+  location = "US"
+}
+
+resource "google_compute_backend_bucket" "cdn_backend" {
+  name        = "cdn-backend"
+  bucket_name = google_storage_bucket.image_bucket.name
+  enable_cdn  = true
+}
+
