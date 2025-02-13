@@ -45,11 +45,16 @@ The /terraform folder contains a terraform code to deploy the infrastructure to 
 2. Navigate to the /terraform folder
    ```sh
    cd terraform
-3. Authenticate to GCP using ADC by using the below command:
+3. Modify the project_id and project_number in "locals.tf"
+4. Create a Cloud Storage bucket manually with all defaults in "us-central1" region. This will bucket will be used to store the terraform state file remotely. Follow this official documentation:
+   ```sh
+   https://cloud.google.com/storage/docs/creating-buckets
+5. Modify the value of bucket in "backend.tf" to the value created in earlier step.
+6. Authenticate to GCP using ADC by using the below command:
    ```sh
    gcloud auth application-default login
-4. This will show a link to authenticate to gcloud. Click on the link and follow the steps to authenticate.
-3. Once the authentication is complete, run the terraform:
+7. This will show a link to authenticate to gcloud. Click on the link and follow the steps to authenticate.
+8. Once the authentication is complete, run the terraform:
    ```sh
    terraform init
    terraform plan
