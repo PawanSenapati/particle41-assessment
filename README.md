@@ -59,3 +59,4 @@ The /terraform folder contains a terraform code to deploy the infrastructure to 
    terraform init
    terraform plan
    terraform apply
+9. You will find the Cloud Run URL and Load Balancer IP as output at the end of "terraform apply" command.
